@@ -128,18 +128,16 @@ input = "fc1
 
 **out : layer width = 43**  
 
-
-<body><br/><br/>
+<body>
 <font size=3, color='red'><b>・About below images</b></font><br/>
-<b>"BP" means the flow of layer "conv -> Batch Normalization -> Max Pooling"</b><br/>
-<b>"PB" means the flow of layer "conv -> Max Pooling -> Batch Normalization"</b><br/><br/>
+"BP" means the flow of layer "conv -> Batch Normalization -> Max Pooling"  
+"PB" means the flow of layer "conv -> Max Pooling -> Batch Normalization"  
 
-<b>"No Fully Layer" means there is no fully layer. In other words, This network don't have 3st stage</b><br/>
-<b>"One Fully Layer" means this architecrue is same to final architecture.</b><br/>
-<b>"Two Fully Layer" means add Fully layer2 to final architecture. layer width = 100</b>
+"No Fully Layer" means there is no fully layer. In other words, This network don't have 3st stage  
+"One Fully Layer" means this architecrue is same to final architecture.  
+"Two Fully Layer" means add Fully layer2 to final architecture. layer width = 100  
 </body>
-
-<body><img src="./images/fig2.png", width=1400, height=1400/></body>
+<body><img src="./images/fig2.png"/></body>
 
 ### Question 4
 
@@ -153,7 +151,7 @@ Adam itself does a learning rate decay, so I don't use learning decay.
 **batch size : 378**  
 **epochs : 200**  
 
-<body><img src="./images/fig.png", width=1000, height=1000/></body>
+<body><img src="./images/fig.png"/></body>
 
 <body><font size="5", color="red"><b>NOTE</b></font><br/></body>
 <b>In my local environment(CPU Only), I don't execute my training program because it was very very slow.</b><br/>
