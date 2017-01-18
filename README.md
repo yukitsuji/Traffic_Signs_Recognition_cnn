@@ -62,7 +62,6 @@ Here is an example of a [published baseline model on this problem](http://yann.l
 <b>But this is a little defferent from final architecture. Sorry for confusing.</b><br/><br/>
 </font>  
 
-
 <font size="3"><p><b>・multi-scale convolutional network.</b></p></font>
 
 <b>learning rate = 0.0005</b><br/>
@@ -75,32 +74,24 @@ Here is an example of a [published baseline model on this problem](http://yann.l
 
 conv1 + ReLU : kernel size = 5, layer width = 108<br/>
 channel Y connect 108 kernel.<br/>
-
 max pooling : kernel size = 2<br/>
 Batch Normalization<br/>
- 
-
 output = "conv1"<br/>
 ------------------------2st stage-------------------------<br/>
 input = "conv1"<br/>
-
 conv2 + ReLU : kernel size = 3, layer width = 200<br/>
 max pooling : kernel size = 2<br/>
 Batch Normalization<br/>
-
 output = "conv2"<br/>
 </b>  
 ------------------------3st stage-------------------------<br/>
 <b><font size=3, color='red'>combine "conv1(flatten)" with "conv2(flatten)"**</font><br/>
 input = concat "conv1(flatten)" and "conv2(flatten)"<br/>  
-
 fully network + ReLU : layer width = 300<br/>
 Batch Normalization<br/>
-
 output = "fc1"<br/>
 ------------------------4st stage-------------------------<br/>  
 input = "fc1"<br/>
-
 out : layer width = 43<br/>
 </b>
 </body>
@@ -154,7 +145,7 @@ def RGB_to_YUV(images):
         return images
 ```
 
-## how to set up the training, validation and testing data for the model.
+## Step 4: How to set up the training, validation and testing data for the model.
 
 Like this paper : http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf,  
 
