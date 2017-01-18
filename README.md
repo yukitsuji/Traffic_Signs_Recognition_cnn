@@ -61,7 +61,7 @@ So I choose YUV conversion<br/><br/>
 This is for activate function.<br/>
 </body>
 
-<body><img src="./images/P.png", width=500, height=500/></body>
+<body><img src="./images/P.png"/></body>
 
 ## Step 3: How to set up the training, validation and testing data for the model.
 
@@ -88,7 +88,7 @@ So I don't add new data to original datasets, and I use original datasets.
 **Below image is comparison with "New Datasets" and "Original Datasets"**  
 "378" and "776" means Batch Size
 
-<body><img src="./images/GD.png", width=500, height=500/></body>
+<body><img src="./images/GD.png"/></body>
 ## final architecture (Type of model, layers, sizes, connectivity, etc.)
 
 <body><font size="3"><b>I made a multi-scale convolutional network.</b></font><br/></body>
