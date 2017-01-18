@@ -1,7 +1,6 @@
 # Traffic Sign Recognition by CNN
- Traffic Sign Recognition by Convolutional Neural Network.
- Datasets is [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset).
- Finally I get 97.8% accuracy(Test sets).
+ Traffic Sign Recognition by Convolutional Neural Network.  
+ Datasets is [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). Finally I get 97.8% accuracy(Test sets).
  
 ---
 ## Step 0: Load The Data
@@ -94,7 +93,6 @@ There are various aspects to consider when thinking about this problem:
 Here is an example of a [published baseline model on this problem](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf). It's good practice to try to read papers like these.
 
 <body>
-<p><br><font size=8>Note</font><br/></p><br/>
 <font size=4>
 <b>1. Below Graphes indicates "test accuracy"</b><br/>
 <b>2. When I compare each parameter like below images,  the basic architecture and hyper parameters are like below</b><br/>
@@ -144,10 +142,7 @@ out : layer width = 43<br/>
 </b>
 </body>
 
-#### how you preprocessed the data. Why did you choose that technique?_
-
-<b>Answer:</b><br/>
-<body><font size=3><b>1 : How I preprocess the data</b></font><br/><br/>
+## how to preprocess the data. Why did you choose that technique?
 
 Like this paper : http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf,<br/><br/>
 
@@ -199,9 +194,7 @@ def RGB_to_YUV(images):
         return images
 ```
 
-#### how to set up the training, validation and testing data for the model.
-
-<body><font size=3><b>1 : how to prepare and divide into training, validation sets</b></font></body>
+## how to set up the training, validation and testing data for the model.
 
 Like this paper : http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf,  
 
@@ -333,7 +326,7 @@ def main():
     plt.show()
 ```
 
-#### final architecture (Type of model, layers, sizes, connectivity, etc.)
+## final architecture (Type of model, layers, sizes, connectivity, etc.)
 
 <body><font size="3"><b>I made a multi-scale convolutional network.</b></font><br/></body>
 
