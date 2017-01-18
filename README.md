@@ -96,7 +96,19 @@ input = "fc1
 </body>
 <body><img src="./images/fig2.png"/></body>
 
-## Step 3: How to preprocess the data. The process I choose that technique
+
+## Step 3: Hyper Parameter
+
+**Type of optimizer : Adam **   
+Adam itself does a learning rate decay, so I don't use learning decay.
+
+**learning rate = 0.0005**  
+**batch size : 378**  
+**epochs : 200**  
+
+<body><img src="./images/fig.png"/></body>
+
+## Step 4: How to preprocess the data. The process I choose that technique
 ----
 
 Like this paper : http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf,<br/><br/>
@@ -113,7 +125,7 @@ This is for activate function.<br/>
 
 <body><img src="./images/P.png"/></body>
 
-## Step 4: How to set up the training, validation and testing data for the model.
+## Step 5: How to set up the training, validation and testing data for the model.
 
 Like this paper : http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf,  
 
@@ -139,14 +151,3 @@ So I don't add new data to original datasets, and I use original datasets.
 "378" and "776" means Batch Size
 
 <body><img src="./images/GD.png"/></body>
-
-## Step 5 Hyper Parameter
-
-**Type of optimizer : Adam **   
-Adam itself does a learning rate decay, so I don't use learning decay.
-
-**learning rate = 0.0005**  
-**batch size : 378**  
-**epochs : 200**  
-
-<body><img src="./images/fig.png"/></body>
