@@ -7,10 +7,7 @@
 
 
 ```python
-# Load pickled data
 import pickle
-
-# TODO: Fill this in based on where you saved the training and testing data
 
 training_file = './train.p'
 testing_file = './test.p'
@@ -36,8 +33,6 @@ The pickled data is a dictionary with 4 key/value pairs:
 - `'coords'` is a list containing tuples, (x1, y1, x2, y2) representing coordinates of a bounding box around the sign in the image. **THESE COORDINATES ASSUME THE ORIGINAL IMAGE. THE PICKLED DATA CONTAINS RESIZED VERSIONS (32 by 32) OF THESE IMAGES**
 
 ```python
-### Replace each question mark with the appropriate value.
-
 n_train = './train.p'
 n_test = './test.p'
 image_shape = X_train.shape[1:]  # (32, 32, 3)
