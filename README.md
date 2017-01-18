@@ -1,7 +1,4 @@
-# Traffic Sign Recognition by Convolutional Neural Netowork
-
-
-## Deep Learning
+# Traffic Sign Recognition by CNN
 ---
 ## Step 0: Load The Data
 
@@ -797,7 +794,7 @@ plt.show()
 
 
 
-![png](output_40_1.png)
+![png](./images/output_40_1.png)
 
 
 ### Question 7
@@ -838,7 +835,7 @@ plt.show()
 ```
 
 
-![png](output_43_0.png)
+![png](./images/output_43_0.png)
 
 
 ### Question 8
