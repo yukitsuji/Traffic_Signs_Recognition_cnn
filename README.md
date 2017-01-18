@@ -93,7 +93,7 @@ So I don't add new data to original datasets, and I use original datasets.
 
 <body><font size="3"><b>I made a multi-scale convolutional network.</b></font><br/></body>
 
-*inputs data : [batch, 32, 32, 3]  YUV data  *
+**inputs data : [batch, 32, 32, 3]  YUV data**  
 ------------------------1st stage-------------------------  
 input = inputs data  
 
@@ -104,7 +104,6 @@ channnel UV connect 8 kernel.
 **max pooling : kernel size = 2**   
 **Batch Normalization**  
  
-
 output = "conv1"  
 ------------------------2st stage-------------------------  
 input = "conv1"  
@@ -142,127 +141,6 @@ input = "fc1
 
 <body><img src="./images/fig2.png", width=1400, height=1400/></body>
 
-
-```python
-### Define your architecture here.
-### Feel free to use as many code cells as needed.
-def build_graph(is_training):
-    """define model architecture, loss function, optimizer"""
-    def conv2d(x, W, b, stride=1):
-        """define convolution layer"""
-        x = tf.nn.conv2d(x, W, strides=[1, stride, stride, 1], padding='SAME')
-        x = tf.nn.bias_add(x, b)
-        return tf.nn.relu(x)
-
-    def maxpool2d(x, k=2):
-        """define max pooling layer"""
-        return tf.nn.max_pool(
-            x,
-            ksize = [1, k, k, 1],
-            strides = [1, k, k, 1],
-            padding='SAME')
-
-    def batch_norm(inputs, is_training, decay=0.9, eps=1e-5):
-        """Batch Normalization
-
-           Args:
-               inputs: input data(Batch size) from last layer
-               is_training: when you test, please set is_training "None"
-           Returns:
-               output for next layer
-        """
-        gamma = tf.Variable(tf.ones(inputs.get_shape()[1:]), name="gamma")
-        beta = tf.Variable(tf.zeros(inputs.get_shape()[1:]), name="beta")
-        pop_mean = tf.Variable(tf.zeros(inputs.get_shape()[1:]), trainable=False, name="pop_mean")
-        pop_var = tf.Variable(tf.ones(inputs.get_shape()[1:]), trainable=False, name="pop_var")
-
-        if is_training != None:
-            batch_mean, batch_var = tf.nn.moments(inputs, [0])
-            train_mean = tf.assign(pop_mean, pop_mean * decay + batch_mean*(1 - decay))
-            train_var = tf.assign(pop_var, pop_var * decay + batch_var * (1 - decay))
-            with tf.control_dependencies([train_mean, train_var]):
-                return tf.nn.batch_normalization(inputs, batch_mean, batch_var, beta, gamma, eps)
-        else:
-            return tf.nn.batch_normalization(inputs, pop_mean, pop_var, beta, gamma, eps)
-
-    def create_model(x, weights, biases, is_training):
-        """define model architecture"""
-        conv1_1 = conv2d(tf.expand_dims(x[:, :, :, 0], 3), weights['layer_1_1'], biases['layer_1_1'])
-        conv1_2 = conv2d(x[:, :, :, 1:], weights['layer_1_2'], biases['layer_1_2'])
-        conv1 = tf.concat(3, [conv1_1, conv1_2])
-        conv1 = maxpool2d(conv1, 2)
-        conv1 = batch_norm(conv1, is_training)
-
-        conv2 = conv2d(conv1, weights['layer_2'], biases['layer_2'])
-        conv2 = maxpool2d(conv2, 2)
-        conv2 = batch_norm(conv2, is_training)
-
-        layer_3_1 = tf.reshape(
-            conv2,
-            [-1, 8*8*200]
-        )
-        layer_3_2 = tf.reshape(
-            conv1,
-            [-1, 16*16*108]
-        )
-        fc1 = tf.concat(1, [layer_3_1, layer_3_2])
-
-        fully = tf.add(tf.matmul(fc1, weights['fully']), biases['fully'])
-        fully = tf.nn.relu(fully)
-        fully = batch_norm(fully, is_training)
-        out = tf.add(tf.matmul(fully, weights['out']), biases['out'])
-        return out
-
-    layer_width = {
-        'layer_1_1' : 100,
-        'layer_1_2' : 8,
-        'layer_2' : 200,
-        'fully' : 300,
-        'out' : 43
-    }
-
-    #weight =  [filter_width, filter_height, in_channels, out_channel]
-    weights = {
-        'layer_1_1' : tf.Variable(
-            tf.truncated_normal([5, 5, 1, layer_width['layer_1_1']],
-                stddev=0.01, seed=832289), name="w_layer_1_1"),
-        'layer_1_2' : tf.Variable(
-            tf.truncated_normal([5, 5, 2, layer_width['layer_1_2']],
-                stddev=0.01, seed=832289), name="w_layer_1_2"),
-        'layer_2' : tf.Variable(
-            tf.truncated_normal([3, 3, layer_width['layer_1_1']+layer_width['layer_1_2'],
-                layer_width['layer_2']], stddev=0.01, seed=832289), name="w_layer_2"),
-        'fully' : tf.Variable(
-            tf.truncated_normal([8 * 8 * layer_width['layer_2'] + 16*16*108, layer_width['fully']],
-                stddev=0.01, seed=832289), name="w_fully"),
-        'out' : tf.Variable(
-            tf.truncated_normal([layer_width['fully'], layer_width['out']],
-                stddev=0.01, seed=832289), name="w_out")
-    }
-
-    biases = {
-        'layer_1_1' : tf.Variable(tf.zeros(layer_width['layer_1_1']), name="b_layer_1_1"),
-        'layer_1_2' : tf.Variable(tf.zeros(layer_width['layer_1_2']), name="b_layer_1_2"),
-        'layer_2' : tf.Variable(tf.zeros(layer_width['layer_2']), name="b_layer_2"),
-        'fully' : tf.Variable(tf.zeros(layer_width['fully']), name="b_fully"),
-        'out' : tf.Variable(tf.zeros(layer_width['out']), name="b_out")
-    }
-
-
-    x = tf.placeholder("float", [None, 32, 32, 3])
-    y = tf.placeholder("float", [None, 43])
-    phase_train = tf.placeholder(tf.bool, name='phase_train') if is_training else None
-
-    classifier = create_model(x, weights, biases, phase_train)
-    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(classifier, y))
-    opt = tf.train.AdamOptimizer(0.0005)
-    optimizer = opt.minimize(cost)
-    correct_prediction = tf.equal(tf.argmax(classifier, 1), tf.argmax(y, 1))
-    accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-
-    return x, phase_train, y, optimizer, cost, accuracy
-```
-
 ### Question 4
 
 #### How to train your model? (Type of optimizer, batch size, epochs, hyperparameters, etc.)_
@@ -276,64 +154,6 @@ Adam itself does a learning rate decay, so I don't use learning decay.
 **epochs : 200**  
 
 <body><img src="./images/fig.png", width=1000, height=1000/></body>
-
-```python
-
-def get_accuracy(x, y, phase_train, X_test, Y_test, accuracy, test_batch_size=30):
-    """Get accuracy of selected datasets"""
-    num_iter = X_test.shape[0] // test_batch_size
-    num_accuracy= 0
-    for ni in range(num_iter):
-        num_accuracy += accuracy.eval({x : X_test[test_batch_size*ni : test_batch_size*(ni+1)],
-                            y : Y_test[test_batch_size*ni : test_batch_size*(ni+1)], phase_train: None})
-    num_accuracy = num_accuracy / num_iter
-    return num_accuracy
-
-def train_validation_test(X_train, Y_train, X_valid, Y_valid, X_test, Y_test, training_epochs=200, batch_size=378):
-    """Excecute Training, Validation, Test
-
-       Returns:
-           valid_accuracy_list (list): accuracy of Validation sets of each epoch
-           test_accuracy_list (list): accuracy of Test sets of each epoch
-    """
-    batch_size = batch_size
-    training_epochs = training_epochs
-
-    test_accuracy_list = []
-    valid_accuracy_list = []
-    x, phase_train, y, optimizer, cost, accuracy =  build_graph(is_training=True)
-    saver = tf.train.Saver()
-
-    with tf.Session() as sess:
-        sess.run(tf.initialize_all_variables())
-
-        for epoch in range(training_epochs):
-            sum_cost = 0
-            total_batch = len(X_train)//batch_size
-            for i in range(total_batch):
-                batch_x, batch_y = X_train[i*batch_size : (i+1) * batch_size], Y_train[i*batch_size : (i+1) * batch_size]
-                sess.run(optimizer, feed_dict={x: batch_x, y: batch_y, phase_train: True})
-                sum_cost += sess.run(cost, feed_dict={x: X_train, y: Y_train})
-            print("Epoch:", '%04d' % (epoch+1), "cost=", "{:.9f}".format(sum_cost))
-
-            valid_accuracy = get_accuracy(x, y, phase_train, X_valid, Y_valid, accuracy, test_batch_size=30)
-            valid_accuracy_list.append(valid_accuracy)
-            print(
-                "valid Accuracy:",
-                valid_accuracy
-            )
-
-            test_accuracy = get_accuracy(x, y, phase_train, X_test, Y_test, accuracy, test_batch_size=30)
-            test_accuracy_list.append(test_accuracy)
-            print(
-                "test Accuracy:",
-                test_accuracy
-            )
-        print("Optimization Finished!")
-        saver.save(sess, "model.ckpt")
-
-    return valid_accuracy_list, test_accuracy_list
-```
 
 <body><font size="5", color="red"><b>NOTE</b></font><br/></body>
 <b>In my local environment(CPU Only), I don't execute my training program because it was very very slow.</b><br/>
@@ -388,56 +208,6 @@ You may find `signnames.csv` useful as it contains mappings from the class id (i
 ### Implementation
 
 Use the code cell (or multiple code cells, if necessary) to implement the first step of your project. Once you have completed your implementation and are satisfied with the results, be sure to thoroughly answer the questions that follow.
-
-
-```python
-### Run the predictions here.
-### Feel free to use as many code cells as needed.
-import tensorflow as tf
-import numpy as np
-from scipy import misc
-import cv2
-
-def test1(test_features):
-    # tf Graph input
-    batch_size = 378
-    training_epochs = 1
-
-    test_accuracy_list = []
-    x, phase_train,predictions =  build_graph(is_training=True)
-    saver = tf.train.Saver()
-    new_saver = tf.train.import_meta_graph("model.ckpt.meta")
-    last_model = tf.train.latest_checkpoint('./')
-    print(last_model)
-    with tf.Session() as sess:
-        saver.restore(sess, last_model)
-        probabilities = sess.run(predictions, feed_dict={x: test_features,phase_train: None})
-        top_k = sess.run(tf.nn.top_k(probabilities, 5, sorted=True))
-        print("Predicted Labels")
-        print(top_k)
-        print(np.argmax(probabilities, 1))
-        np.savez("top_k.npz", top = top_k, predict_answer = np.argmax(probabilities, 1))
-        
-        
-def main():    
-    test_images = np.uint8(np.zeros((5,32,32,3)))
-
-    for i in range(5):
-        ifile = 'test{}.png'.format(i+1)
-        im = misc.imread(ifile)[:, :, :3]
-        im = misc.imresize(im, (32, 32))
-        test_images[i] = im
-       
-    test_images = test_images.astype(np.float32)
-    
-    for i in range(5):
-        test_images[i] = (test_images[i]  - test_images[i].min()) *  (255.0 / (test_images[i].max() - test_images[i].min()))
-
-    yuv_train_features = np.copy(test_images)
-    test_images = RGB_to_YUV(yuv_train_features, test_images)
-    test_images = test_images.astype(np.float32)
-    test1(test_images/255.0)
-```
 
 <body><font size="5", color="red"><b>NOTE</b></font><br/></body>
 <b>In my local environment(CPU Only), I can't reuse parameter because of some error.</b><br/>
