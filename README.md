@@ -43,9 +43,6 @@ n_test = './test.p'
 image_shape = X_train.shape[1:]  # (32, 32, 3)
 n_classes = len(set(y_train))    #  43
 ```
-
-Visualize the German Traffic Signs Dataset using the pickled file(s).
-
 ![png](./images/output_7_1.png)
 
 
@@ -56,12 +53,6 @@ Visualize the German Traffic Signs Dataset using the pickled file(s).
 Here is an example of a [published baseline model on this problem](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf). It's good practice to try to read papers like these.
 
 <body>
-<font size=4>
-<b>1. Below Graphes indicates "test accuracy"</b><br/>
-<b>2. When I compare each parameter like below images,  the basic architecture and hyper parameters are like below</b><br/>
-<b>But this is a little defferent from final architecture. Sorry for confusing.</b><br/><br/>
-</font>  
-
 <font size="3"><p><b>・multi-scale convolutional network.</b></p></font>
 
 <b>learning rate = 0.0005</b><br/>
