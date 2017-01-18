@@ -1,4 +1,8 @@
 # Traffic Sign Recognition by CNN
+ Traffic Sign Recognition by Convolutional Neural Network.
+ Datasets is [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset).
+ Finally I get 97.8% accuracy(Test sets).
+ 
 ---
 ## Step 0: Load The Data
 
@@ -32,23 +36,13 @@ The pickled data is a dictionary with 4 key/value pairs:
 - `'sizes'` is a list containing tuples, (width, height) representing the the original width and height the image.
 - `'coords'` is a list containing tuples, (x1, y1, x2, y2) representing coordinates of a bounding box around the sign in the image. **THESE COORDINATES ASSUME THE ORIGINAL IMAGE. THE PICKLED DATA CONTAINS RESIZED VERSIONS (32 by 32) OF THESE IMAGES**
 
-Complete the basic data summary below.
-
-
 ```python
 ### Replace each question mark with the appropriate value.
 
-# TODO: Number of training examples
 n_train = './train.p'
-
-# TODO: Number of testing examples.
 n_test = './test.p'
-
-# TODO: What's the shape of an traffic sign image?
-image_shape = X_train.shape[1:]
-
-# TODO: How many unique classes/labels there are in the dataset.
-n_classes = len(set(y_train))
+image_shape = X_train.shape[1:]  # (32, 32, 3)
+n_classes = len(set(y_train))    #  43
 
 print("Number of training examples =", n_train)
 print("Number of testing examples =", n_test)
@@ -56,18 +50,9 @@ print("Image data shape =", image_shape)
 print("Number of classes =", n_classes)
 ```
 
-    Number of training examples = ./train.p
-    Number of testing examples = ./test.p
-    Image data shape = (32, 32, 3)
-    Number of classes = 43
-
-
-Visualize the German Traffic Signs Dataset using the pickled file(s). This is open ended, suggestions include: plotting traffic sign images, plotting the count of each sign, etc.
-
+Visualize the German Traffic Signs Dataset using the pickled file(s).
 
 ```python
-### Data exploration visualization goes here.
-### Feel free to use as many code cells as needed.
 import matplotlib.pyplot as plt
 import numpy as np
 # Visualizations will be shown in the notebook.
@@ -86,15 +71,9 @@ for yi in range(9):
         axes[yi, xi].set_title('label %d : %d' % (label_num, np.sum(y_train == label_num)), fontsize=8)
         
 fig.subplots_adjust(left = None, right = None, top = None, bottom = None, wspace = 0.2, hspace = 0.2)
-
 fig.suptitle("plotting traffic sign images with counts", fontsize=27)
 plt.show()
 ```
-
-
-    <matplotlib.figure.Figure at 0x10d59e240>
-
-
 
 ![png](./images/output_7_1.png)
 
@@ -165,10 +144,6 @@ out : layer width = 43<br/>
 </b>
 </body>
 
-### Implementation
-
-Use the code cell (or multiple code cells, if necessary) to implement the first step of your project. Once you have completed your implementation and are satisfied with the results, be sure to thoroughly answer the questions that follow.
-
 #### how you preprocessed the data. Why did you choose that technique?_
 
 <b>Answer:</b><br/>
@@ -205,7 +180,6 @@ import numpy as np
 import cv2
 ```
 
-
 ```python
 def RGB_to_YUV(images):
     """Image color space conversion from RGB to YUV
@@ -225,9 +199,7 @@ def RGB_to_YUV(images):
         return images
 ```
 
-#### Describe how you set up the training, validation and testing data for your model.
-
-**Answer:**  
+#### how to set up the training, validation and testing data for the model.
 
 <body><font size=3><b>1 : how to prepare and divide into training, validation sets</b></font></body>
 
@@ -363,7 +335,6 @@ def main():
 
 #### final architecture (Type of model, layers, sizes, connectivity, etc.)
 
-**Answer:**  
 <body><font size="3"><b>I made a multi-scale convolutional network.</b></font><br/></body>
 
 **inputs data : [batch, 32, 32, 3]  YUV data  **  
@@ -550,10 +521,7 @@ Adam itself does a learning rate decay, so I don't use learning decay.
 
 <body><img src="./images/fig.png", width=1000, height=1000/></body>
 
-
 ```python
-### Train your model here.
-### Feel free to use as many code cells as needed.
 
 def get_accuracy(x, y, phase_train, X_test, Y_test, accuracy, test_batch_size=30):
     """Get accuracy of selected datasets"""
