@@ -45,51 +45,8 @@ n_classes = len(set(y_train))    #  43
 ```
 ![png](./images/output_7_1.png)
 
-
+## Step2: final architecture (Type of model, layers, sizes, connectivity, etc.)
 ----
-## Step 2: How to preprocess the data. The process I choose that technique
-
-Like this paper : http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf,<br/><br/>
-<font size=3><b>RGB to YUV conversion</b><br/></font>
-the reason image/video codecs are YUV is so they can reduce the resolution of the U and V channels while keeping Y at full resolution, because luminance is more important than color.<br/>   
-But, I don't think YUV by itself would be a big advantage over RGB.<br/><br/>
-And, If you can reduce the resolution of U and V in a way that's compatible with convolutional nets, your net should be half the size and therefore twice as fast, without much loss of accuracy.<br/><br/>
-However, blow image shows that "Y" and "Y_100, UV_8" are better than RGB datasets.<br/>
-So I choose YUV conversion<br/><br/>
-・<b>"Y_100, UV_8"</b> means Y channle connect 100 kernel and UV channle connect 8 kernel.<br/><br/>
-<font size=3><b>data scale [0, 1]</b> :  X_train / 255<br/></font>
-This is for activate function.<br/>
-</body>
-
-<body><img src="./images/P.png"/></body>
-
-## Step 3: How to set up the training, validation and testing data for the model.
-
-Like this paper : http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf,  
-
-The dataset "GTSRB" were extracted from 1-second video sequences which each track has 30 samples. in other words, Every 30 images is from a single sign traffic.     
-  
-So, I ensure the validation set would have at least one image per traffic sign, per 30 images.
-
-So I separate each track to two segments.  
-One is training sets that have about 27 or 28 images per track.    
-The other is validation sets that have 2 or 3 images per track
-
-That means one of the images in X_train[:30] will go into validation set, as well as one image from X_train[30:60]  
-<br>
-<body><b><font size=3>2 : How did you generate the data?</font></b></body>
-
-I tried to generate additional data by "blur original images".  
-Generally, by building a jittered dataset, the models would probably increase robustness.
-
-But there is no differences between original datasets and new datasets in terms of accuracy(test).  
-So I don't add new data to original datasets, and I use original datasets.  
-
-**Below image is comparison with "New Datasets" and "Original Datasets"**  
-"378" and "776" means Batch Size
-
-<body><img src="./images/GD.png"/></body>
-## final architecture (Type of model, layers, sizes, connectivity, etc.)
 
 <body><font size="3"><b>I made a multi-scale convolutional network.</b></font><br/></body>
 
@@ -139,11 +96,52 @@ input = "fc1
 </body>
 <body><img src="./images/fig2.png"/></body>
 
-### Question 4
+## Step 3: How to preprocess the data. The process I choose that technique
+----
 
-#### How to train your model? (Type of optimizer, batch size, epochs, hyperparameters, etc.)_
+Like this paper : http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf,<br/><br/>
+<font size=3><b>RGB to YUV conversion</b><br/></font>
+the reason image/video codecs are YUV is so they can reduce the resolution of the U and V channels while keeping Y at full resolution, because luminance is more important than color.<br/>   
+But, I don't think YUV by itself would be a big advantage over RGB.<br/><br/>
+And, If you can reduce the resolution of U and V in a way that's compatible with convolutional nets, your net should be half the size and therefore twice as fast, without much loss of accuracy.<br/><br/>
+However, blow image shows that "Y" and "Y_100, UV_8" are better than RGB datasets.<br/>
+So I choose YUV conversion<br/><br/>
+・<b>"Y_100, UV_8"</b> means Y channle connect 100 kernel and UV channle connect 8 kernel.<br/><br/>
+<font size=3><b>data scale [0, 1]</b> :  X_train / 255<br/></font>
+This is for activate function.<br/>
+</body>
 
-**Answer:**  
+<body><img src="./images/P.png"/></body>
+
+## Step 4: How to set up the training, validation and testing data for the model.
+
+Like this paper : http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf,  
+
+The dataset "GTSRB" were extracted from 1-second video sequences which each track has 30 samples. in other words, Every 30 images is from a single sign traffic.     
+  
+So, I ensure the validation set would have at least one image per traffic sign, per 30 images.
+
+So I separate each track to two segments.  
+One is training sets that have about 27 or 28 images per track.    
+The other is validation sets that have 2 or 3 images per track
+
+That means one of the images in X_train[:30] will go into validation set, as well as one image from X_train[30:60]  
+<br>
+<body><b><font size=3>2 : How did you generate the data?</font></b></body>
+
+I tried to generate additional data by "blur original images".  
+Generally, by building a jittered dataset, the models would probably increase robustness.
+
+But there is no differences between original datasets and new datasets in terms of accuracy(test).  
+So I don't add new data to original datasets, and I use original datasets.  
+
+**Below image is comparison with "New Datasets" and "Original Datasets"**  
+"378" and "776" means Batch Size
+
+<body><img src="./images/GD.png"/></body>
+
+## Step 5 Hyper Parameter
+
 **Type of optimizer : Adam **   
 Adam itself does a learning rate decay, so I don't use learning decay.
 
