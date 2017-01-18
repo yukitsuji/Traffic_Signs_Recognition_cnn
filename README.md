@@ -1,6 +1,6 @@
 # Traffic Sign Recognition by CNN
  Traffic Sign Recognition by Convolutional Neural Network.  
- Datasets is [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). Finally I get 97.8% accuracy(Test sets).
+ Datasets is [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). Finally I get 97.8% accuracy(Test sets).  
  This project is for self driving car at Udacity Nanodegree program
 
 ## Step 0: Load The Data
