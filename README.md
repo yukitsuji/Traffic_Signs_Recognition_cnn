@@ -1,19 +1,7 @@
+# Traffic Sign Recognition by Convolutional Neural Netowork
 
-# Table of Contents
- <p><div class="lev1 toc-item"><a href="#Self-Driving-Car-Engineer-Nanodegree" data-toc-modified-id="Self-Driving-Car-Engineer-Nanodegree-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Self-Driving Car Engineer Nanodegree</a></div><div class="lev2 toc-item"><a href="#Deep-Learning" data-toc-modified-id="Deep-Learning-11"><span class="toc-item-num">1.1&nbsp;&nbsp;</span>Deep Learning</a></div><div class="lev2 toc-item"><a href="#Project:-Build-a-Traffic-Sign-Recognition-Classifier" data-toc-modified-id="Project:-Build-a-Traffic-Sign-Recognition-Classifier-12"><span class="toc-item-num">1.2&nbsp;&nbsp;</span>Project: Build a Traffic Sign Recognition Classifier</a></div><div class="lev2 toc-item"><a href="#Step-0:-Load-The-Data" data-toc-modified-id="Step-0:-Load-The-Data-13"><span class="toc-item-num">1.3&nbsp;&nbsp;</span>Step 0: Load The Data</a></div><div class="lev2 toc-item"><a href="#Step-1:-Dataset-Summary-&amp;-Exploration" data-toc-modified-id="Step-1:-Dataset-Summary-&amp;-Exploration-14"><span class="toc-item-num">1.4&nbsp;&nbsp;</span>Step 1: Dataset Summary &amp; Exploration</a></div><div class="lev2 toc-item"><a href="#Step-2:-Design-and-Test-a-Model-Architecture" data-toc-modified-id="Step-2:-Design-and-Test-a-Model-Architecture-15"><span class="toc-item-num">1.5&nbsp;&nbsp;</span>Step 2: Design and Test a Model Architecture</a></div><div class="lev3 toc-item"><a href="#Implementation" data-toc-modified-id="Implementation-151"><span class="toc-item-num">1.5.1&nbsp;&nbsp;</span>Implementation</a></div><div class="lev3 toc-item"><a href="#Question-1" data-toc-modified-id="Question-1-152"><span class="toc-item-num">1.5.2&nbsp;&nbsp;</span>Question 1</a></div><div class="lev3 toc-item"><a href="#Question-2" data-toc-modified-id="Question-2-153"><span class="toc-item-num">1.5.3&nbsp;&nbsp;</span>Question 2</a></div><div class="lev3 toc-item"><a href="#Question-3" data-toc-modified-id="Question-3-154"><span class="toc-item-num">1.5.4&nbsp;&nbsp;</span>Question 3</a></div><div class="lev3 toc-item"><a href="#Question-4" data-toc-modified-id="Question-4-155"><span class="toc-item-num">1.5.5&nbsp;&nbsp;</span>Question 4</a></div><div class="lev3 toc-item"><a href="#Question-5" data-toc-modified-id="Question-5-156"><span class="toc-item-num">1.5.6&nbsp;&nbsp;</span>Question 5</a></div><div class="lev2 toc-item"><a href="#Step-3:-Test-a-Model-on-New-Images" data-toc-modified-id="Step-3:-Test-a-Model-on-New-Images-16"><span class="toc-item-num">1.6&nbsp;&nbsp;</span>Step 3: Test a Model on New Images</a></div><div class="lev3 toc-item"><a href="#Implementation" data-toc-modified-id="Implementation-161"><span class="toc-item-num">1.6.1&nbsp;&nbsp;</span>Implementation</a></div><div class="lev3 toc-item"><a href="#Question-6" data-toc-modified-id="Question-6-162"><span class="toc-item-num">1.6.2&nbsp;&nbsp;</span>Question 6</a></div><div class="lev3 toc-item"><a href="#Question-7" data-toc-modified-id="Question-7-163"><span class="toc-item-num">1.6.3&nbsp;&nbsp;</span>Question 7</a></div><div class="lev3 toc-item"><a href="#Question-8" data-toc-modified-id="Question-8-164"><span class="toc-item-num">1.6.4&nbsp;&nbsp;</span>Question 8</a></div>
-
-# Self-Driving Car Engineer Nanodegree
 
 ## Deep Learning
-
-## Project: Build a Traffic Sign Recognition Classifier
-
-In this notebook, a template is provided for you to implement your functionality in stages which is required to successfully complete this project. If additional code is required that cannot be included in the notebook, be sure that the Python code is successfully imported and included in your submission, if necessary. Sections that begin with **'Implementation'** in the header indicate where you should begin your implementation for your project. Note that some sections of implementation are optional, and will be marked with **'Optional'** in the header.
-
-In addition to implementing code, there will be questions that you must answer which relate to the project and your implementation. Each section where you will answer a question is preceded by a **'Question'** header. Carefully read each question and provide thorough answers in the following text boxes that begin with **'Answer:'**. Your project submission will be evaluated based on your answers to each of the questions and the implementation you provide.
-
->**Note:** Code and Markdown cells can be executed using the **Shift + Enter** keyboard shortcut. In addition, Markdown cells can be edited by typically double-clicking the cell to enter edit mode.
-
 ---
 ## Step 0: Load The Data
 
@@ -79,10 +67,6 @@ print("Number of classes =", n_classes)
 
 Visualize the German Traffic Signs Dataset using the pickled file(s). This is open ended, suggestions include: plotting traffic sign images, plotting the count of each sign, etc.
 
-The [Matplotlib](http://matplotlib.org/) [examples](http://matplotlib.org/examples/index.html) and [gallery](http://matplotlib.org/gallery.html) pages are a great resource for doing visualizations in Python.
-
-**NOTE:** It's recommended you start with something simple first. If you wish to do more, come back to it after you've completed the rest of the sections.
-
 
 ```python
 ### Data exploration visualization goes here.
@@ -115,7 +99,7 @@ plt.show()
 
 
 
-![png](output_7_1.png)
+![png](./images/output_7_1.png)
 
 
 ----
@@ -131,9 +115,7 @@ There are various aspects to consider when thinking about this problem:
 - Number of examples per label (some have more than others).
 - Generate fake data.
 
-Here is an example of a [published baseline model on this problem](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf). It's not required to be familiar with the approach used in the paper but, it's good practice to try to read papers like these.
-
-**NOTE:** The LeNet-5 implementation shown in the [classroom](https://classroom.udacity.com/nanodegrees/nd013/parts/fbf77062-5703-404e-b60c-95b78b2f3f9e/modules/6df7ae49-c61c-4bb2-a23e-6527e69209ec/lessons/601ae704-1035-4287-8b11-e2c2716217ad/concepts/d4aca031-508f-4e0b-b493-e7b706120f81) at the end of the CNN lesson is a solid starting point. You'll have to change the number of classes and possibly the preprocessing, but aside from that it's plug and play!
+Here is an example of a [published baseline model on this problem](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf). It's good practice to try to read papers like these.
 
 <body>
 <p><br><font size=8>Note</font><br/></p><br/>
@@ -190,9 +172,7 @@ out : layer width = 43<br/>
 
 Use the code cell (or multiple code cells, if necessary) to implement the first step of your project. Once you have completed your implementation and are satisfied with the results, be sure to thoroughly answer the questions that follow.
 
-### Question 1 
-
-_Describe how you preprocessed the data. Why did you choose that technique?_
+#### how you preprocessed the data. Why did you choose that technique?_
 
 <b>Answer:</b><br/>
 <body><font size=3><b>1 : How I preprocess the data</b></font><br/><br/>
@@ -248,9 +228,7 @@ def RGB_to_YUV(images):
         return images
 ```
 
-### Question 2
-
-_Describe how you set up the training, validation and testing data for your model. **Optional**: If you generated additional data, how did you generate the data? Why did you generate the data? What are the differences in the new dataset (with generated data) from the original dataset?_
+#### Describe how you set up the training, validation and testing data for your model.
 
 **Answer:**  
 
@@ -386,11 +364,7 @@ def main():
     plt.show()
 ```
 
-### Question 3
-
-_What does your final architecture look like? (Type of model, layers, sizes, connectivity, etc.)  For reference on how to build a deep neural network using TensorFlow, see [Deep Neural Network in TensorFlow
-](https://classroom.udacity.com/nanodegrees/nd013/parts/fbf77062-5703-404e-b60c-95b78b2f3f9e/modules/6df7ae49-c61c-4bb2-a23e-6527e69209ec/lessons/b516a270-8600-4f93-a0a3-20dfeabe5da6/concepts/83a3a2a2-a9bd-4b7b-95b0-eb924ab14432) from the classroom._
-
+#### final architecture (Type of model, layers, sizes, connectivity, etc.)
 
 **Answer:**  
 <body><font size="3"><b>I made a multi-scale convolutional network.</b></font><br/></body>
@@ -567,8 +541,7 @@ def build_graph(is_training):
 
 ### Question 4
 
-_How did you train your model? (Type of optimizer, batch size, epochs, hyperparameters, etc.)_
-
+#### How to train your model? (Type of optimizer, batch size, epochs, hyperparameters, etc.)_
 
 **Answer:**  
 **Type of optimizer : Adam **   
