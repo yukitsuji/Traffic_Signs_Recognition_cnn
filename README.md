@@ -47,49 +47,9 @@ n_classes = len(set(y_train))    #  43
 
 
 ----
-
-## Step 2: Design and Test a Model Architecture
-
-Here is an example of a [published baseline model on this problem](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf). It's good practice to try to read papers like these.
-
-<body>
-<font size="3"><p><b>・multi-scale convolutional network.</b></p></font>
-
-<b>learning rate = 0.0005</b><br/>
-<b>batch size : 378</b><br/>
-<b>epochs : 200</b><br/>
-
-<p><b>inputs data : [batch, 32, 32, 1]  only Y data</b></p>  
-------------------------1st stage-------------------------<br/>
-<b>input = inputs data<br/>
-
-conv1 + ReLU : kernel size = 5, layer width = 108<br/>
-channel Y connect 108 kernel.<br/>
-max pooling : kernel size = 2<br/>
-Batch Normalization<br/>
-output = "conv1"<br/>
-------------------------2st stage-------------------------<br/>
-input = "conv1"<br/>
-conv2 + ReLU : kernel size = 3, layer width = 200<br/>
-max pooling : kernel size = 2<br/>
-Batch Normalization<br/>
-output = "conv2"<br/>
-</b>  
-------------------------3st stage-------------------------<br/>
-<b><font size=3, color='red'>combine "conv1(flatten)" with "conv2(flatten)"**</font><br/>
-input = concat "conv1(flatten)" and "conv2(flatten)"<br/>  
-fully network + ReLU : layer width = 300<br/>
-Batch Normalization<br/>
-output = "fc1"<br/>
-------------------------4st stage-------------------------<br/>  
-input = "fc1"<br/>
-out : layer width = 43<br/>
-</b>
-</body>
-## Step 3: How to preprocess the data. The process I choose that technique
+## Step 2: How to preprocess the data. The process I choose that technique
 
 Like this paper : http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf,<br/><br/>
-
 <font size=3><b>RGB to YUV conversion</b><br/></font>
 the reason image/video codecs are YUV is so they can reduce the resolution of the U and V channels while keeping Y at full resolution, because luminance is more important than color.<br/>   
 But, I don't think YUV by itself would be a big advantage over RGB.<br/><br/>
@@ -97,46 +57,13 @@ And, If you can reduce the resolution of U and V in a way that's compatible with
 However, blow image shows that "Y" and "Y_100, UV_8" are better than RGB datasets.<br/>
 So I choose YUV conversion<br/><br/>
 ・<b>"Y_100, UV_8"</b> means Y channle connect 100 kernel and UV channle connect 8 kernel.<br/><br/>
-
 <font size=3><b>data scale [0, 1]</b> :  X_train / 255<br/></font>
 This is for activate function.<br/>
 </body>
 
 <body><img src="./images/P.png", width=500, height=500/></body>
 
-
-```python
-import tensorflow as tf
-import pickle
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from matplotlib import pylab
-from sklearn.model_selection import train_test_split
-import numpy as np
-import cv2
-```
-
-```python
-def RGB_to_YUV(images):
-    """Image color space conversion from RGB to YUV
-
-        Args:
-            images (numpy array): 3 or 4 dimension. RGB Image
-                                  4 dimension is (batch size, image shape)
-        Returns
-            images (numpy array): 3 or 4 dimension. YUV Image
-    """
-    if images.ndim == 4:
-        for xi in range(images.shape[0]):
-            images[xi] =  cv2.cvtColor(images[xi], cv2.COLOR_RGB2YUV)
-        return images
-    else:
-        images = cv2.cvtColor(images, cv2.COLOR_RGB2YUV)
-        return images
-```
-
-## Step 4: How to set up the training, validation and testing data for the model.
+## Step 3: How to set up the training, validation and testing data for the model.
 
 Like this paper : http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf,  
 
@@ -162,117 +89,11 @@ So I don't add new data to original datasets, and I use original datasets.
 "378" and "776" means Batch Size
 
 <body><img src="./images/GD.png", width=500, height=500/></body>
-
-
-```python
-### Generate data additional data
-### and split the data into training/validation/testing sets here.
-### Feel free to use as many code cells as needed.
-def shuffle_datasets(x, y):
-    """shuffle datasets"""
-    np.random.seed(832289)
-    argnum = np.arange(y.shape[0])
-    np.random.shuffle(argnum)
-    x = x[argnum]
-    y = y[argnum]
-    return x, y
-
-def divide_training_and_validataion(original_X_train, original_y_train, n_classes, test_size=0.08):
-    """divide training sets into training and validation sets.
-       Training Sets has same portion(0.92) of each category.
-       Validation Sets has same portion(0.08)
-
-       Args:
-           original_X_train (numpy array): 4 dimension Datasets for Training(image)
-           original_y_train (numpy array): 1-dimension Datasets for Training(category)
-           n_classes (int): number of categories
-
-       Returns
-           X_train (numpy array): 4 dimension Training Sets(image)
-           X_valid (numpy array): 4 dimension Validation Sets(image)
-           y_train (numpy array): 1 dimension Training Sets(category)
-           y_valid (numpy array): 1 dimension Validation Sets(category)
-    """
-    X_train = np.array([]); X_valid = np.array([])
-    y_train = np.array([]); y_valid = np.array([])
-
-    sum_of_each_categories = 0
-    for nc in range(n_classes):
-        sum_of_each_categories += np.sum(original_y_train == nc)
-        x = original_X_train[sum_of_each_categories : sum_of_each_categories + sum_of_each_categories]
-        y = original_y_train[sum_of_each_categories : sum_of_each_categories + sum_of_each_categories]
-        train_feature, valid_feature, train_label, valid_label = train_test_split(
-            x,
-            y,
-            test_size=test_size,
-            random_state=3
-        )
-        if nc == 0:
-            X_train = train_feature; X_valid = valid_feature
-            y_train = train_label;   y_valid = valid_label
-        else:
-            X_train = np.concatenate([X_train, train_feature], axis=0)
-            X_valid = np.concatenate([X_valid, valid_feature], axis=0)
-            y_train = np.concatenate([y_train, train_label], axis=0)
-            y_valid = np.concatenate([y_valid, valid_label], axis=0)
-
-    return X_train, X_valid, y_train, y_valid
-
-def to_onehot_vector(y_values, n_classes):
-    """convert to one hot vector"""
-    onehot_y = np.zeros((y_values.shape[0], n_classes))
-    onehot_y[np.arange(y_values.shape[0]), y_values] = 1
-    return onehot_y
-
-def main():
-    training_file = './train.p'
-    test_file = './test.p'
-
-    with open(training_file, mode='rb') as f:
-        train = pickle.load(f)
-
-    with open(test_file, mode='rb') as f:
-        test = pickle.load(f)
-
-    X_train, y_train = train['features'], train['labels']
-    X_test, y_test = test['features'], test['labels']
-
-    X_train = RGB_to_YUV(X_train)
-    X_test = RGB_to_YUV(X_test)
-
-    n_classes = len(set(y_train))
-
-    X_train, X_valid, y_train, y_valid = divide_training_and_validataion(X_train, y_train, n_classes)
-
-    X_train = X_train / 255
-    X_valid = X_valid / 255
-    X_test = X_test / 255
-
-    X_train, y_train = shuffle_datasets(X_train, y_train)
-    X_valid, y_valid = shuffle_datasets(X_valid, y_valid)
-
-    Y_train = to_onehot_vector(y_train, n_classes)
-    Y_valid = to_onehot_vector(y_valid, n_classes)
-    Y_test = to_onehot_vector(y_test, n_classes)
-
-    training_epochs = 200
-    valid_accuracy_list, test_accuracy_list = train_validation_test(X_train, Y_train, X_valid, Y_valid, X_test, Y_test, training_epochs=training_epochs, batch_size=378)
-
-    plt.plot(np.arange(0,training_epochs), test_accuracy_list, 'b', label="test accuracy")
-    plt.plot(np.arange(0,training_epochs), valid_accuracy_list, 'r', label="valid accuracy")
-    plt.legend(loc='best')
-    plt.yticks(np.arange(0.00, 1.05, 0.05))
-    plt.xlabel("epoch");plt.ylabel("accuracy")
-    plt.title("model.py"); plt.savefig("model.png", dpi=150)
-    np.savez('model.npz', valid=valid_accuracy_list, test=test_accuracy_list)
-    plt.show()
-```
-
 ## final architecture (Type of model, layers, sizes, connectivity, etc.)
 
 <body><font size="3"><b>I made a multi-scale convolutional network.</b></font><br/></body>
 
-**inputs data : [batch, 32, 32, 3]  YUV data  **  
+*inputs data : [batch, 32, 32, 3]  YUV data  *
 ------------------------1st stage-------------------------  
 input = inputs data  
 
