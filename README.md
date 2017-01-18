@@ -42,37 +42,9 @@ n_train = './train.p'
 n_test = './test.p'
 image_shape = X_train.shape[1:]  # (32, 32, 3)
 n_classes = len(set(y_train))    #  43
-
-print("Number of training examples =", n_train)
-print("Number of testing examples =", n_test)
-print("Image data shape =", image_shape)
-print("Number of classes =", n_classes)
 ```
 
 Visualize the German Traffic Signs Dataset using the pickled file(s).
-
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-# Visualizations will be shown in the notebook.
-%matplotlib inline
-
-fig = plt.figure()
-fig, axes = plt.subplots(9, 5, figsize = (8, 15))
-
-for yi in range(9):
-    for xi in range(5):
-        label_num = 5*yi + xi
-        if (label_num) >= n_classes:
-            axes[yi,xi].axis('off');
-            continue;
-        axes[yi, xi].imshow(X_train[y_train == label_num][15]); axes[yi,xi].axis('off');
-        axes[yi, xi].set_title('label %d : %d' % (label_num, np.sum(y_train == label_num)), fontsize=8)
-        
-fig.subplots_adjust(left = None, right = None, top = None, bottom = None, wspace = 0.2, hspace = 0.2)
-fig.suptitle("plotting traffic sign images with counts", fontsize=27)
-plt.show()
-```
 
 ![png](./images/output_7_1.png)
 
@@ -80,15 +52,6 @@ plt.show()
 ----
 
 ## Step 2: Design and Test a Model Architecture
-
-Design and implement a deep learning model that learns to recognize traffic signs. Train and test your model on the [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset).
-
-There are various aspects to consider when thinking about this problem:
-
-- Neural network architecture
-- Play around preprocessing techniques (normalization, rgb to grayscale, etc)
-- Number of examples per label (some have more than others).
-- Generate fake data.
 
 Here is an example of a [published baseline model on this problem](http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf). It's good practice to try to read papers like these.
 
@@ -141,17 +104,14 @@ input = "fc1"<br/>
 out : layer width = 43<br/>
 </b>
 </body>
-
-## how to preprocess the data. Why did you choose that technique?
+## Step 3: How to preprocess the data. The process I choose that technique
 
 Like this paper : http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf,<br/><br/>
 
 <font size=3><b>RGB to YUV conversion</b><br/></font>
 the reason image/video codecs are YUV is so they can reduce the resolution of the U and V channels while keeping Y at full resolution, because luminance is more important than color.<br/>   
 But, I don't think YUV by itself would be a big advantage over RGB.<br/><br/>
-
 And, If you can reduce the resolution of U and V in a way that's compatible with convolutional nets, your net should be half the size and therefore twice as fast, without much loss of accuracy.<br/><br/>
-
 However, blow image shows that "Y" and "Y_100, UV_8" are better than RGB datasets.<br/>
 So I choose YUV conversion<br/><br/>
 ・<b>"Y_100, UV_8"</b> means Y channle connect 100 kernel and UV channle connect 8 kernel.<br/><br/>
